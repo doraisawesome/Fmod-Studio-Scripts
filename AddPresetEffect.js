@@ -7,44 +7,53 @@
 // 3. Adding the preset to the master track
 
 var projectPath = studio.project.filePath.substr(0, studio.project.filePath.lastIndexOf("/"));
-
 // Get Events.js Module for event functions
 var eventUtilPath = projectPath + "/Scripts/utils/Events.js";
 var EVENT_UTILS = studio.system.require(eventUtilPath);
 
 studio.menu.addMenuItem({
-    name: 'Spatializer\\Add Normal Spatializer',
-	keySequence: 'Ctrl+H',
+    name: 'User\\Add Effect Master',
+	keySequence: 'Ctrl+Shift+M',
 	execute: function () {
 
-		function getEffectPreset() {
-			return studio.project.lookup('effect:/Normal');
+		function getEffectPreset(presetName) {
+			var effectPreset = studio.project.lookup('effect:/' + presetName);
+			if (presetName == '' || effectPreset == undefined) {
+				alert('No such preset found!');
+				return null;
+			}
+			return effectPreset;
 		}
 
-		function addSpatializer() {
+		function addEffectPresetToMasterTrack(widget) {
 			var highlighedEvent = EVENT_UTILS.getHightlightEvent();
-			var presetSpatilizer = getEffectPreset();
+			var presetName = widget.findWidget('user_input').text();
+			var effectPreset = getEffectPreset(presetName);
 			
-            highlighedEvent.masterTrack.mixerGroup.effectChain.addEffect(presetSpatilizer);
+            highlighedEvent.masterTrack.mixerGroup.effectChain.addEffect(effectPreset);
 		}
 
 		studio.ui.showModalDialog({
-			windowTitle: 'Add Spatializer',
+			windowTitle: 'Add Effect Preset to Master Track',
 			windowWidth: 340,
 			windowHeight: 120,
 			widgetType: studio.ui.widgetType.Layout,
 			layout: studio.ui.layoutType.VBoxLayout,
 			items: [{
-
+				widgetType: studio.ui.widgetType.Lable,
+				text: 'Input Preset Effect Name:',
+			}, {
+				widgetType: studio.ui.widgetType.LineEdit,
+				widgetId: 'user_input',
+				text: 'Normal'
 			}, {
 				widgetType: studio.ui.widgetType.PushButton,
-				text: 'Add Events',
+				text: 'Done',
 				onClicked: function () {
-					addSpatializer();
+					addEffectPresetToMasterTrack(this);
 					this.closeDialog();
 				}
-			},
-			]
+			}]
 		});
 	},
 });
