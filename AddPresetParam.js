@@ -1,14 +1,19 @@
 /* eslint-disable no-undef */
 /* eslint-disable linebreak-style */
-// Goal: add a existing parameter on the event
+/*
+	Use this script to add an exiting parameter to the selected event
+
+	Steps:
+	1. Enter all parameter names you want to add down below (separate with comma)
+	1. highlight the event
+	2. Ctrl+Shift+P or select from Scripts menu to run this script
+*/
+var PARAMETER_NAMES_TO_ADD = ["Speed"];
 
 var projectPath = studio.project.filePath.substr(0, studio.project.filePath.lastIndexOf("/"));
 // Get Events.js Module for event functions
 var eventUtilPath = projectPath + "/Scripts/utils/Events.js";
 var EVENT_UTILS = studio.system.require(eventUtilPath);
-
-/* ENTER NAMES HERE FOR PARAMETERS TO ADD */
-var paramNames = ["Speed"];
 
 studio.menu.addMenuItem({
 	name: 'User\\Add Parameter',
@@ -16,18 +21,29 @@ studio.menu.addMenuItem({
 	execute: function () {
 		
 		function getParameter(paramName) {
-			var parameter = studio.project.lookup('parameter:/' + paramName);
-			if (paramName == '' || parameter == undefined) {
-				alert('No such parameter found: ' + paramName);
-				return null;
+			if (paramName != '') {
+				var parameter = studio.project.lookup('parameter:/' + paramName);
+				return parameter;
 			}
-			return parameter;
+			return false;
+		}
+
+		function checkParameter(parameter, name) {
+			if (parameter == undefined || parameter == false) {
+				alert('No parameter found: ' + name);
+				return false;
+			}
+			return true;
 		}
 		
-		paramNames.forEach(function(name) {
-			var parameter = getParameter(name);
+		PARAMETER_NAMES_TO_ADD.forEach(function(name) {
 			var highlighedEvent = EVENT_UTILS.getHightlightEvent();
-			highlighedEvent.addGameParameter(parameter);
+			var parameter = getParameter(name);
+			var isParameterExist = checkParameter(parameter, name);
+
+			if (isParameterExist == true) {
+				highlighedEvent.addGameParameter(parameter);
+			}
 		});
 	}
 });
