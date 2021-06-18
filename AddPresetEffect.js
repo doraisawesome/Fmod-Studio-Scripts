@@ -1,10 +1,13 @@
 /* eslint-disable no-undef */
 /* eslint-disable linebreak-style */
-// Goal: add a custom preset on master track
+/*
+	Use this script to add an exiting effect preset to the selected event's master track
 
-// 1. Get the master track of highlighted event
-// 2. Get the preset -> then custom preset
-// 3. Adding the preset to the master track
+	Steps:
+	1. highlight the event
+	2. Ctrl+Shift+M or select from Scripts menu to run this script
+	3. enter the exact effect preset name when propmt with dialog box
+*/
 
 var projectPath = studio.project.filePath.substr(0, studio.project.filePath.lastIndexOf("/"));
 // Get Events.js Module for event functions
@@ -12,25 +15,39 @@ var eventUtilPath = projectPath + "/Scripts/utils/Events.js";
 var EVENT_UTILS = studio.system.require(eventUtilPath);
 
 studio.menu.addMenuItem({
-    name: 'User\\Add Effect Master',
+    name: 'User\\Add Preset Effect',
 	keySequence: 'Ctrl+Shift+M',
 	execute: function () {
 
 		function getEffectPreset(presetName) {
-			var effectPreset = studio.project.lookup('effect:/' + presetName);
-			if (presetName == '' || effectPreset == undefined) {
-				alert('No such preset found!');
-				return null;
-			}
+			var allPresets = studio.project.model.EffectPreset.findInstances();
+			var effectPreset = allPresets.find(function(preset) {
+				if (presetName == preset.name) {
+					preset.dump()
+					return preset;
+				}
+				return false;
+			});
 			return effectPreset;
+		}
+
+		function checkEffectPreset(effectPreset) {
+			if (!effectPreset) {
+				alert('No such preset found!');
+				return false;
+			}
+			return true;
 		}
 
 		function addEffectPresetToMasterTrack(widget) {
 			var highlighedEvent = EVENT_UTILS.getHightlightEvent();
 			var presetName = widget.findWidget('user_input').text();
 			var effectPreset = getEffectPreset(presetName);
+			var isEffectPresetExist = checkEffectPreset(effectPreset);
 			
-            highlighedEvent.masterTrack.mixerGroup.effectChain.addEffect(effectPreset);
+			if (isEffectPresetExist == true) {
+				highlighedEvent.masterTrack.mixerGroup.effectChain.addEffect(effectPreset);
+			}
 		}
 
 		studio.ui.showModalDialog({
@@ -45,7 +62,7 @@ studio.menu.addMenuItem({
 			}, {
 				widgetType: studio.ui.widgetType.LineEdit,
 				widgetId: 'user_input',
-				text: 'Normal'
+				text: ''
 			}, {
 				widgetType: studio.ui.widgetType.PushButton,
 				text: 'Done',
