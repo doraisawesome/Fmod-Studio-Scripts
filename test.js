@@ -8,9 +8,10 @@ studio.menu.addMenuItem({
 	keySequence: 'Ctrl+H',
 	execute: function () {
         var event = studio.window.browserCurrent();
-		var param = event.addGameParameter({
-			name: "Speed"
-		});
+		var params = stu
+		// var param = event.addGameParameter({
+		// 	name: "Speed"
+		// });
         // var multiSound = studio.window.editorCurrent().addSound(event.timeline, 'MultiSound', 0, 10);
         // multiSound.dump();
 

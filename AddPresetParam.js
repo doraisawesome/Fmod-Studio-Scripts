@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable linebreak-style */
 /*
-	Use this script to add an exiting parameter to the selected event
+	Use this script to add an exiting parameter to a selected event
 
 	Steps:
 	1. Enter all parameter names you want to add down below (separate with comma)
