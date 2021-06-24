@@ -1,1 +1,1 @@
-# Fmod-Studio-Scripts
+Note: "utils" folder is needed together with AddPresetEffec.js and AddPresetParam.js to make these two scripts to work.

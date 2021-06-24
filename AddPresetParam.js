@@ -1,12 +1,11 @@
-/* eslint-disable no-undef */
-/* eslint-disable linebreak-style */
 /*
 	Use this script to add an exiting parameter to a selected event
 
 	Steps:
-	1. Enter all parameter names you want to add down below (separate with comma)
-	1. highlight the event
-	2. Ctrl+Shift+P or select from Scripts menu to run this script
+	1. Enter all parameter names you want to add down below (separate with comma) and save
+	2. reload scripts from Scripts menu in Fmod
+	3. highlight the event 
+	4. Ctrl+Shift+P or select from Scripts menu to run this script
 */
 var PARAMETER_NAMES_TO_ADD = ["Speed"];
 

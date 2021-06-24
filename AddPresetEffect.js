@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable linebreak-style */
 /*
 	Use this script to add an exiting effect preset to the selected event's master track
 
@@ -23,7 +21,6 @@ studio.menu.addMenuItem({
 			var allPresets = studio.project.model.EffectPreset.findInstances();
 			var effectPreset = allPresets.find(function(preset) {
 				if (presetName == preset.name) {
-					preset.dump()
 					return preset;
 				}
 				return false;
